@@ -4,11 +4,12 @@ import { API } from '../api';
 
 interface UseAPIResponse<T> {
     ok: boolean;
-    data: T
+    data: T,
+    error?: any;
 }
 
-export default function useAPI<T = any>() {
-    const httpGet = useCallback(async function (uri: string): Promise<UseAPIResponse<T | null>> {
+export default function useAPI<T = any, R = any>() {
+    const httpGet = async (uri: string): Promise<UseAPIResponse<T | null>> => {
         try {
             const res = await API.get<T>(uri);
             return {
@@ -16,22 +17,38 @@ export default function useAPI<T = any>() {
                 data: res.data
             };
         } catch (error) {
+            console.log('[err]', error);
             return {
                 ok: false,
-                data: null
+                data: null,
+                error,
             }
         }
-    }, []);
+    };
 
-    const httpPost = useCallback(async function (uri: string, body: T): Promise<void> {
-        await API.post(uri, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(body),
-        })
-    }, []);
+    const httpPost = async (uri: string, body: T): Promise<UseAPIResponse<R | null>> => {
+        try {
+            const res = await API.post<R>(uri, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(body),
+            });
 
-    return { httpGet, httpPost }
+            return {
+                ok: true,
+                data: res.data,
+            }
+
+        } catch (error) {
+            console.log('[err]', error);
+            return {
+                ok: false,
+                data: null,
+            }
+        }
+    };
+
+    return { httpGet, httpPost };
 }
