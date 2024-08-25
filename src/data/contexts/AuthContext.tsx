@@ -8,8 +8,7 @@ interface IAuthContext {
   loading: boolean;
   loggedIn: boolean;
   
-  signIn(email: string, password: string): Promise<any>;
-  signUp(name: string, email: string, password: string): Promise<any>;
+  signIn(id: string, name: string, email: string): Promise<any>;
   signOut(): Promise<void>;
 }
 
@@ -27,12 +26,12 @@ export function AuthProvider({ children }: PropsWithChildren) {
     setEmail('');
   }
 
-  const signIn = useCallback(async (email: string, password: string) => {
-    // login user
-  }, []);
 
-  const signUp = useCallback(async (name: string, email: string, password: string) => {
-    // sign up user
+  const signIn = useCallback(async (id: string, name: string, email: string) => {
+    await SecureStore.setItemAsync('user', JSON.stringify({ id, name, email }));
+    setUserId(id);
+    setName(name);
+    setEmail(email);
   }, []);
 
   const signOut = useCallback(async () => {
@@ -54,7 +53,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
         
         const user = JSON.parse(userItem);
         
-        setUserId(user.userId);
+        setUserId(user.id);
         setName(user.name);
         setEmail(user.email);
         setLoading(false);
@@ -72,7 +71,6 @@ export function AuthProvider({ children }: PropsWithChildren) {
       loggedIn,
       signIn,
       signOut,
-      signUp
     }}>
       { children }
     </AuthContext.Provider>
