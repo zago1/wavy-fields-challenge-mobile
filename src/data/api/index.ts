@@ -1,7 +1,9 @@
-import axios from "axios";
+import axios from 'axios';
 
 const baseURL = process.env.EXPO_PUBLIC_URL_BASE;
 
-export const API = axios.create({
-  baseURL
+const API = axios.create({
+  baseURL,
 });
+
+export { API };
