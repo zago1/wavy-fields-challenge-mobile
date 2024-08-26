@@ -1,4 +1,4 @@
-import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, StyleSheet, Text, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native'
 import React from 'react'
 
 type Props = {
@@ -6,18 +6,20 @@ type Props = {
   title: string;
   disabled?: boolean;
   loading?: boolean;
+  style?: ViewStyle | ViewStyle[];
+  textStyle?: TextStyle | TextStyle[];
 }
 
-const Button = ({ title, onPress, disabled = false, loading = false }: Props) => {
+const Button = ({ title, onPress, disabled = false, loading = false, style, textStyle }: Props) => {
   return (
     <TouchableOpacity 
       onPress={onPress} 
       disabled={disabled}
-      style={[styles.container, disabled && styles.disabled]}>
+      style={[styles.container, disabled && styles.disabled, style]}>
         { 
           loading 
             ? <ActivityIndicator color="#FFF" /> 
-            : <Text style={styles.text}>{ title }</Text>
+            : <Text style={[styles.text, textStyle]}>{ title }</Text>
         }      
     </TouchableOpacity>
   )

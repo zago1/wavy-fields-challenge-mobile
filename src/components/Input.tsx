@@ -3,16 +3,17 @@ import React from 'react'
 
 interface Props extends TextInputProps {
   label: string;
+  labelColor?: string;
 }
 
-const Input = ({ label,...props }: Props) => {
+const Input = ({ label, labelColor,...props }: Props) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>{ label }</Text>
+      <Text style={[styles.label, !!labelColor && { color: labelColor }]}>{ label }</Text>
       <TextInput 
-        style={styles.input}
-        placeholderTextColor="#A1A1A1"
         {...props}
+        style={[styles.input, props.style]}
+        placeholderTextColor="#A1A1A1"
       />
     </View>
   )
@@ -24,6 +25,7 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     alignItems: 'flex-start',
+    width: '100%',
     gap: 2,
   },
   label: {
@@ -35,5 +37,6 @@ const styles = StyleSheet.create({
     borderBottomColor: '#FFF',
     width: '100%',
     color: '#FFF',
+    padding: 4
   }
 })
