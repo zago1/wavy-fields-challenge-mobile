@@ -6,13 +6,25 @@ import { TodosContext } from '../data/contexts/TodosContext'
 import { Todo } from '../data/interfaces/Todos'
 import TodoItem from './TodoItem'
 import EditTodoModal from './EditTodoModal'
+import Button from './Button'
+import { ActivityIndicator } from 'react-native-paper'
+import ErrorHandler from './ErrorHandler'
 
 type Props = {}
 
 const TodoList = (props: Props) => {
   const [open, setOpen] = useState(false);
 
-  const { todos, toggleDone, deleteTodo, addTodoToEdit } = useContext(TodosContext);
+  const {
+    todos,
+    toggleDone,
+    deleteTodo,
+    addTodoToEdit,
+    listLoading,
+    loadMore,
+    error,
+    retry
+  } = useContext(TodosContext);
 
   const handleEdit = (id: string) => {
     addTodoToEdit(id);
@@ -32,6 +44,10 @@ const TodoList = (props: Props) => {
     setOpen(false);
   }
 
+  if (error) {
+    return <ErrorHandler retry={retry} title="Ops! Something went wrong..." />
+  }
+
   return (
     <>
       <EditTodoModal open={open} onClose={handleClose} />
@@ -46,6 +62,21 @@ const TodoList = (props: Props) => {
             onDone={() => handleDone(item)}
             onEdit={() => handleEdit(item.id)}
           />}
+        ListFooterComponent={() => 
+          listLoading 
+          ? <ActivityIndicator size={20} color="#FFF" />
+          : 
+            <>
+              {
+                todos.length >= 20 && <Button
+                  textStyle={styles.loadMoreBtnText}
+                  style={styles.loadMoreBtn}
+                  onPress={loadMore}
+                  title="Load More" 
+                />
+              }
+            </>
+        }
       />
     </>
   )
@@ -53,4 +84,16 @@ const TodoList = (props: Props) => {
 
 export default TodoList
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  loadMoreBtn: {
+    borderWidth: 0,
+    backgroundColor: 'transparent',
+    paddingVertical: 8
+  },
+  loadMoreBtnText: {
+    color: '#FFF',
+    fontWeight: 'bold',
+    fontStyle: 'italic',
+    textDecorationLine: 'underline',
+  }
+})
