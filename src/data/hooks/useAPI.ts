@@ -28,13 +28,7 @@ export default function useAPI<T = any, R = any>() {
 
     const httpPost = async (uri: string, body: T): Promise<UseAPIResponse<R | null>> => {
         try {
-            const res = await API.post<R>(uri, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(body),
-            });
+            const res = await API.post<R>(uri, body);
 
             return {
                 ok: true,
@@ -50,5 +44,39 @@ export default function useAPI<T = any, R = any>() {
         }
     };
 
-    return { httpGet, httpPost };
+    const httpPatch = async (uri: string, body: T): Promise<UseAPIResponse<R | null>> => {
+        try {
+            const res = await API.patch<R>(uri, body);
+
+            return {
+                ok: true,
+                data: res.data
+            }
+        } catch (error) {
+            return {
+                ok: false,
+                error,
+                data: null
+            }
+        }
+    }
+
+    const httpDelete = async (uri: string): Promise<UseAPIResponse<null>> => {
+        try {
+            await API.delete(uri);
+
+            return {
+                ok: true,
+                data: null
+            }
+        } catch (error) {
+            return {
+                ok: false,
+                error,
+                data: null,
+            }
+        }
+    }
+
+    return { httpGet, httpPost, httpPatch, httpDelete };
 }
