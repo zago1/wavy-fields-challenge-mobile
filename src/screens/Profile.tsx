@@ -10,6 +10,7 @@ import { useUser } from '../data/hooks/useUser';
 import CustomModal from '../components/CustomModal';
 import EditUsernameForm from '../components/EditUsernameForm';
 import ChangeUserPasswordForm from '../components/ChangeUserPasswordForm';
+import { TodosContext } from '../data/contexts/TodosContext';
 
 type Props = {}
 
@@ -18,11 +19,17 @@ const Profile = (props: Props) => {
   const [openEditPassword, setOpenEditPassword] = useState(false);
 
   const { name, email, signOut } = useContext(AuthContext);
+  const { resetTodos } = useContext(TodosContext);
 
   const { deleteCurrentUser, loading } = useUser();
 
   const handleEditNameClose = () => setOpenEditName(false);
   const handleEditPasswordClose = () => setOpenEditPassword(false);
+
+  const handleSignout = async () => {
+    resetTodos();
+    await signOut();
+  }
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -51,7 +58,7 @@ const Profile = (props: Props) => {
           <Button
             style={styles.btnLogout}
             title="Logout"
-            onPress={signOut}
+            onPress={handleSignout}
             textStyle={styles.btnText}
             disabled={loading}
           />
