@@ -9,6 +9,8 @@ export const useSignup = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
+  const [loading, setLoading] = useState(false);
+
   const { signIn } = useContext(AuthContext);
   const { httpPost } = useAPI();
 
@@ -34,6 +36,8 @@ export const useSignup = () => {
       return;
     }
 
+    setLoading(true);
+
     const response = await httpPost('/user', { 
       name,
       email,
@@ -43,13 +47,16 @@ export const useSignup = () => {
      if (!response.ok) {
       if (response.error === 'EMAIL_ALREADY_EXISTS_ERROR') {
         alert('Email already exists!');
+        setLoading(false);
         return;
       }
 
       alert('Error while creating user!');
+      setLoading(false);
       return;
      }
 
+     setLoading(false);
      signIn(response.data.id, response.data.name, response.data.email);
 
   }, [name, email, password, confirmPassword]);
@@ -60,6 +67,7 @@ export const useSignup = () => {
     email,
     password,
     confirmPassword,
+    loading,
     handleSetName,
     handleSetEmail,
     handleSetPassword,

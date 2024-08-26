@@ -19,11 +19,12 @@ const Signup = ({ navigation }: Props) => {
     email,
     password,
     confirmPassword,
+    loading,
+
     handleSetName,
     handleSetEmail,
     handleSetPassword,
     handleSetConfirmPassword,
-
     signup
   } = useSignup();
 
@@ -68,8 +69,8 @@ const Signup = ({ navigation }: Props) => {
         />
       </View>
       <View style={styles.footer}>
-        <Button title="Sign up" onPress={signup} />
-        <TouchableOpacity style={styles.haveAccountBtn} onPress={handleHaveAccount}>
+        <Button title="Sign up" onPress={signup} loading={loading} disabled={loading} />
+        <TouchableOpacity disabled={loading} style={styles.haveAccountBtn} onPress={handleHaveAccount}>
           <Text style={styles.haveAccountBtnText}>Already have an account</Text>
         </TouchableOpacity>
       </View>
