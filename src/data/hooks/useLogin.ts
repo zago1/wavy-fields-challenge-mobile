@@ -16,7 +16,7 @@ export const useLogin = () => {
 
   const login = async () => {
       setLoading(true);
-      console.log('[email]', email);
+
       const { data, ok, error } = await httpPost('/login', { email, password });
       setLoading(false);
 

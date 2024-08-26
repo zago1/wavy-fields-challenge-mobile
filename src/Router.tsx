@@ -11,8 +11,13 @@ import Todos from './screens/Todos';
 
 import { AuthContext } from './data/contexts/AuthContext';
 
+export type StackParamsList = {
+  Login: undefined,
+  Signup: undefined
+}
 
-const Stack = createNativeStackNavigator();
+
+const Stack = createNativeStackNavigator<StackParamsList>();
 
 const Tab = createMaterialBottomTabNavigator();
 

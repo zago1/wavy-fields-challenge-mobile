@@ -4,10 +4,16 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import { useLogin } from '../data/hooks/useLogin';
+import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
+import { StackParamsList } from '../Router';
 
-type Props = {};
+type LoginScreenNavigationProp = NativeStackNavigationProp<StackParamsList, 'Login'>;
 
-const Login = (props: Props) => {
+type Props = {
+  navigation: LoginScreenNavigationProp
+};
+
+const Login = ({ navigation }: Props) => {
   const {
     email,
     password,
@@ -16,6 +22,10 @@ const Login = (props: Props) => {
     login,
     loading
   } = useLogin();
+
+  const handleSignup = () => {
+    navigation.navigate('Signup')
+  }
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -39,7 +49,20 @@ const Login = (props: Props) => {
           placeholder="Enter your password"
           secureTextEntry
         />
-        <Button title="Sign In" onPress={login} loading={loading} disabled={loading} />
+        <Button
+          title="Sign In"
+          onPress={login}
+          loading={loading}
+          disabled={loading}
+        />
+
+        <Button
+          title="Sign Up"
+          onPress={handleSignup}
+          disabled={loading}
+          style={styles.signupBtn}
+          textStyle={styles.signupBtnText}
+        />
       </View>
     </SafeAreaView>
   )
@@ -77,4 +100,10 @@ const styles = StyleSheet.create({
     width: '100%',
     gap: 16
   },
+  signupBtn: {
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: '#A1A1A1',
+  },
+  signupBtnText: { color: '#FFF', fontWeight: 'bold' }
 })

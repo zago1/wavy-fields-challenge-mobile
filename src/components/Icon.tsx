@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, ViewStyle } from 'react-native'
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -7,12 +7,13 @@ type Props = {
   name: string;
   color?: string;
   size?: number;
-  onPress?: () => void
+  style?: ViewStyle;
+  onPress?: () => void;
 }
 
-const Icon = ({ name, size = 16, color = '#FFF', onPress = () => {} }: Props) => {
+const Icon = ({ name, size = 16, color = '#FFF', style, onPress = () => {} }: Props) => {
   return (
-    <MaterialCommunityIcons color={color} name={name} size={size} onPress={onPress} />
+    <MaterialCommunityIcons style={style} color={color} name={name} size={size} onPress={onPress} />
   )
 }
 

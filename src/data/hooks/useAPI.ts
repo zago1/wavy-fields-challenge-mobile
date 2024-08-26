@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
 
 import { API } from '../api';
+import { AxiosError } from 'axios';
 
 interface UseAPIResponse<T> {
     ok: boolean;
@@ -17,11 +18,15 @@ export default function useAPI<T = any, R = any>() {
                 data: res.data
             };
         } catch (error) {
-            console.log('[err]', error);
+            let errorMessage = error;
+            if (error instanceof AxiosError) {
+                errorMessage = error.response?.data;
+            }
+
             return {
                 ok: false,
                 data: null,
-                error,
+                error: errorMessage
             }
         }
     };
@@ -37,9 +42,15 @@ export default function useAPI<T = any, R = any>() {
 
         } catch (error) {
             console.log('[err]', error);
+            let errorMessage = error;
+            if (error instanceof AxiosError) {
+                errorMessage = error.response?.data;
+            }
+
             return {
                 ok: false,
                 data: null,
+                error: errorMessage
             }
         }
     };
@@ -53,10 +64,15 @@ export default function useAPI<T = any, R = any>() {
                 data: res.data
             }
         } catch (error) {
+            let errorMessage = error;
+            if (error instanceof AxiosError) {
+                errorMessage = error.response?.data;
+            }
+
             return {
                 ok: false,
-                error,
-                data: null
+                data: null,
+                error: errorMessage
             }
         }
     }
@@ -70,10 +86,15 @@ export default function useAPI<T = any, R = any>() {
                 data: null
             }
         } catch (error) {
+            let errorMessage = error;
+            if (error instanceof AxiosError) {
+                errorMessage = error.response?.data;
+            }
+
             return {
                 ok: false,
-                error,
                 data: null,
+                error: errorMessage
             }
         }
     }
